@@ -1,0 +1,58 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile and progress data",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "nickname": { "type": "string" },
+        "email": { "type": "string" },
+        "avatar": { "type": "string" },
+        "level": { "type": "number" },
+        "xp": { "type": "number" },
+        "progress": {
+          "type": "object",
+          "properties": {
+            "streak": { "type": "number" },
+            "questionsAnswered": { "type": "number" },
+            "successRate": { "type": "number" },
+            "byCategory": {
+              "type": "object",
+              "properties": {
+                "Clínica Médica": { "type": "number" },
+                "Cirurgia": { "type": "number" },
+                "Pediatria": { "type": "number" },
+                "Ginecologia": { "type": "number" }
+              }
+            }
+          }
+        }
+      },
+      "required": ["id", "name", "email", "level", "xp"]
+    },
+    "ClinicalCase": {
+      "title": "Clinical Case",
+      "description": "PBL Clinical case data",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "discipline": { "type": "string" },
+        "difficulty": { "type": "string" },
+        "description": { "type": "string" },
+        "status": { "type": "string", "enum": ["locked", "unlocked", "completed"] }
+      }
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profile data"
+    },
+    "/clinicalCases/{caseId}": {
+      "schema": "ClinicalCase",
+      "description": "Clinical cases for PBL"
+    }
+  }
+}

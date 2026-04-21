@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Helvetica Neue", Arial, sans-serif;
+  
+  --color-med-blue: #0A55D1;
+  --color-med-blue-dark: #073E9B;
+  --color-med-blue-light: #E7F0FF;
+  --color-success: #10B981;
+  --color-bg-slate: #F8FAFC;
+  --color-text-main: #1E293B;
+  --color-text-muted: #64748B;
+  --color-border: #E2E8F0;
+
+  --radius-xl: 12px;
+  --radius-2xl: 16px;
+  --radius-3xl: 24px;
+  
+  --shadow-sleek: 0 4px 6px -1px rgba(0,0,0,0.05);
+}
+
+@layer base {
+  body {
+    @apply font-sans bg-bg-slate text-text-main;
+  }
+}
+
+/* Custom Hide Scrollbar */
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .pbl-card {
+    @apply bg-white rounded-2xl border border-border p-6 shadow-sleek;
+  }
+  
+  .badge {
+    @apply px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider;
+  }
+
+  @keyframes move-stripe {
+    0% { background-position: 0 0; }
+    100% { background-position: 2rem 0; }
+  }
+}

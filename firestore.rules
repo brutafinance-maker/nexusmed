@@ -1,0 +1,44 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default Deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Auth & Validation Primitives
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // User Profile Validation
+    function isValidUser(data) {
+      return data.keys().hasAll(['id', 'name', 'nickname', 'email', 'level', 'xp']) &&
+             data.id == request.auth.uid &&
+             data.email is string &&
+             data.name is string && data.name.size() < 200 &&
+             data.nickname is string && data.nickname.size() < 100 &&
+             data.level is number &&
+             data.xp is number;
+    }
+
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow create: if isOwner(userId) && isValidUser(request.resource.data);
+      allow update: if isOwner(userId) && isValidUser(request.resource.data) &&
+                    request.resource.data.diff(resource.data).affectedKeys().hasOnly(['name', 'nickname', 'avatar', 'xp', 'level', 'progress']);
+    }
+
+    match /clinicalCases/{caseId} {
+      allow read: if isSignedIn();
+    }
+  }
+}
